@@ -1,0 +1,16 @@
+# Environments
+venv/
+.venv/
+.env
+
+# Python
+__pycache__/
+*.pyc
+
+# Data (raw data can be large / shouldn't clutter GitHub)
+data/raw/
+data/processed/
+
+# OS/editor
+.DS_Store
+.vscode/
