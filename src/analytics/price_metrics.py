@@ -36,6 +36,23 @@ def get_price_history(company_name):
     df = pd.read_sql(query, conn, params=(company_name,))
     conn.dispose()
     return df
+def get_returns(company_name):
+    df = get_price_history(company_name)
+    df["daily_return"] = df["close_price"].pct_change()
+    return df[["price_date", "daily_return"]].dropna()
+
+
+def calculate_beta(company_name, market_name="NIFTY50"):
+    stock_returns = get_returns(company_name)
+    market_returns = get_returns(market_name)
+
+    merged = pd.merge(stock_returns, market_returns, on="price_date", suffixes=("_stock", "_market"))
+
+    covariance = merged["daily_return_stock"].cov(merged["daily_return_market"])
+    market_variance = merged["daily_return_market"].var()
+
+    beta = covariance / market_variance
+    return beta
 
 
 def calculate_cagr(df):
@@ -95,3 +112,6 @@ def get_all_metrics(company_name):
 if __name__ == "__main__":
     result = get_all_metrics("TCS")
     print(result)
+
+    beta = calculate_beta("TCS")
+    print(f"TCS beta: {round(beta, 2)}")
