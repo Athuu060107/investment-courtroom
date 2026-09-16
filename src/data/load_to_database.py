@@ -25,6 +25,7 @@ companies = [
     ("SUNPHARMA", "SUNPHARMA.NS", "Pharma"),
     ("DRREDDY", "DRREDDY.NS", "Pharma"),
     ("ULTRACEMCO", "ULTRACEMCO.NS", "Cement"),
+    ("NIFTY50", "^NSEI", "Index"),
 ]
 
 PRICES_DIR = "data/raw/prices"
@@ -87,9 +88,10 @@ def load_stock_prices(cursor, company_id_map):
 def load_financial_statements(cursor, company_id_map):
     print("Loading financial statements...")
     for name, ticker, sector in companies:
+        if sector == "Index":
+            continue
         company_id = company_id_map[name]
         filepath = f"{FUNDAMENTALS_DIR}/{name}.csv"
-
         df = pd.read_csv(filepath)
         rows = []
         for _, row in df.iterrows():
