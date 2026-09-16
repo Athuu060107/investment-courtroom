@@ -26,12 +26,14 @@ OUTPUT_DIR = "data/raw/prices"
 def fetch_price_history(name, ticker, years=5):
     print(f"Fetching {name} ({ticker})...")
     data = yf.download(ticker, period=f"{years}y", interval="1d", auto_adjust=True)
+    data.columns = data.columns.get_level_values(0)
 
     if data.empty:
         print(f"  WARNING: no data returned for {ticker}")
         return
 
-    data.to_csv(f"{OUTPUT_DIR}/{name}.csv")
+    data.reset_index(inplace=True)
+    data.to_csv(f"{OUTPUT_DIR}/{name}.csv", index=False)
     print(f"  saved {len(data)} rows")
 
 if __name__ == "__main__":
