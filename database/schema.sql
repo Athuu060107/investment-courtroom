@@ -50,3 +50,19 @@ CREATE TABLE valuation_metrics (
     FOREIGN KEY (company_id) REFERENCES companies(company_id),
     UNIQUE KEY unique_valuation (company_id)
 );
+CREATE TABLE financial_ratios (
+    ratio_id INT AUTO_INCREMENT PRIMARY KEY,
+    company_id INT NOT NULL,
+    cagr DECIMAL(10,2),
+    volatility DECIMAL(10,2),
+    max_drawdown DECIMAL(10,2),
+    sharpe_ratio DECIMAL(10,2),
+    beta DECIMAL(10,2),
+    roe DECIMAL(10,2),
+    roce DECIMAL(10,2),
+    net_margin DECIMAL(10,2),
+    operating_margin DECIMAL(10,2),
+    calculated_on DATE,
+    FOREIGN KEY (company_id) REFERENCES companies(company_id),
+    UNIQUE KEY unique_ratio (company_id)
+);
