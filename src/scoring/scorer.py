@@ -3,6 +3,7 @@ def score_higher_is_better(value, low, high):
     # anything at or below "low" scores 0, anything at or above "high" scores 100
     if value is None:
         return None
+    value = float(value)
     if value <= low:
         return 0
     if value >= high:
@@ -14,6 +15,7 @@ def score_lower_is_better(value, low, high):
     # same idea but flipped - used for things like P/E or volatility where lower is better
     if value is None:
         return None
+    value = float(value)
     if value <= low:
         return 100
     if value >= high:
