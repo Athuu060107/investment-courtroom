@@ -182,6 +182,18 @@ erDiagram
 
 ---
 
+## Testing
+
+Core calculation logic (scoring, stress testing, and the Historical Case correctness rules) has
+unit tests covering boundary conditions and known expected values:
+
+```bash
+pip install pytest
+pytest tests/test_calculations.py -v
+```
+
+---
+
 ## Companies covered
 
 15 large-cap NSE-listed companies across Banking, IT, Energy, FMCG, Auto, Pharma, and Cement,
