@@ -7,9 +7,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".
 import streamlit as st
 import plotly.graph_objects as go
 
-from src.analytics.price_metrics import get_price_history
-from src.courtroom.bull_engine import get_company_data
-
+from app.cache_utils import cached_price_history, cached_company_data
 st.set_page_config(page_title="Stock Court", page_icon="⚖️", layout="wide")
 
 st.title("Stock Court")
@@ -28,8 +26,7 @@ st.session_state["selected_company"] = selected_company
 
 st.divider()
 
-price_df = get_price_history(selected_company)
-
+price_df = cached_price_history(selected_company)
 fig = go.Figure()
 fig.add_trace(go.Scatter(x=price_df["price_date"], y=price_df["close_price"], mode="lines", name=selected_company))
 fig.update_layout(
@@ -43,8 +40,7 @@ st.plotly_chart(fig, use_container_width=True)
 st.divider()
 st.subheader("Evidence Room — Key Metrics")
 
-data = get_company_data(selected_company)
-
+data = cached_company_data(selected_company)
 if data is None:
     st.warning("No data found for this company.")
 else:

@@ -4,7 +4,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".
 
 import streamlit as st
 
-from src.courtroom.ai_narrator import generate_courtroom_dialogue
+from app.cache_utils import cached_ai_dialogue
 
 st.set_page_config(page_title="AI Courtroom", page_icon="⚖️", layout="wide")
 
@@ -26,7 +26,7 @@ st.info(
 if st.button("🎭 Generate Courtroom Scene"):
     with st.spinner("The court is now in session..."):
         try:
-            dialogue = generate_courtroom_dialogue(company)
+            dialogue = cached_ai_dialogue(company)
             st.divider()
             for line in dialogue.split("\n"):
                 line = line.strip()

@@ -4,7 +4,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".
 
 import streamlit as st
 
-from src.stress_testing.stress_test import run_stress_test
+from app.cache_utils import cached_stress_test
 
 st.set_page_config(page_title="Stress Test", page_icon="⚖️", layout="wide")
 
@@ -29,13 +29,7 @@ revenue_decline = col1.slider("Revenue decline (%)", 0, 50, 0)
 margin_decline = col2.slider("Margin decline (percentage points)", 0, 15, 0)
 pe_shock = col3.slider("P/E contraction (%)", 0, 50, 0)
 
-result = run_stress_test(
-    company,
-    revenue_decline_pct=revenue_decline,
-    margin_decline_pct=margin_decline,
-    pe_shock_pct=pe_shock,
-)
-
+result = cached_stress_test(company, revenue_decline, margin_decline, pe_shock)
 if result is None:
     st.error("Could not run a stress test for this company.")
     st.stop()

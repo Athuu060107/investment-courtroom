@@ -5,7 +5,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".
 import streamlit as st
 import plotly.graph_objects as go
 
-from src.portfolio.portfolio_analytics import calculate_portfolio_metrics
+from app.cache_utils import cached_portfolio_metrics
 
 st.set_page_config(page_title="Portfolio Court", page_icon="⚖️", layout="wide")
 
@@ -41,7 +41,8 @@ if round(total_weight, 1) != 100.0:
 
 if st.button("Analyze Portfolio"):
     holdings = {company: weight / 100 for company, weight in weights.items()}
-    result = calculate_portfolio_metrics(holdings)
+    holdings_items = tuple(sorted(holdings.items()))
+    result = cached_portfolio_metrics(holdings_items)
 
     if "error" in result:
         st.error(result["error"])

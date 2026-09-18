@@ -4,7 +4,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".
 
 import streamlit as st
 
-from src.scoring.judge import judge_company
+from app.cache_utils import cached_judge
 
 st.set_page_config(page_title="Judge's Verdict", page_icon="⚖️", layout="wide")
 
@@ -15,7 +15,7 @@ if "selected_company" not in st.session_state:
     st.stop()
 
 company = st.session_state["selected_company"]
-result = judge_company(company)
+result = cached_judge(company)
 
 if result is None:
     st.error("Could not calculate a verdict for this company.")
