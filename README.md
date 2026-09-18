@@ -70,7 +70,7 @@ something that actually works end-to-end, not just a notebook.
 * **Portfolio Court** — build a multi-stock portfolio and get real diversification-aware volatility, drawdown, Sharpe ratio, and a sector-concentration check
 * **Historical Case Mode** — a blind-guessing game: see a real, anonymized case from ~2 years ago, guess BUY/HOLD/AVOID, then find out what actually happened
 * **Investor DNA** — a behavioral profile (growth bias, risk appetite, valuation discipline, etc.) built from your own decisions in Historical Case Mode
-* **AI Courtroom** *(optional)* — the same computed evidence, narrated as natural courtroom dialogue by an LLM, which is strictly constrained to never invent a number
+* **AI Courtroom** — the same computed evidence, narrated as natural courtroom dialogue by an LLM, which is strictly constrained to never invent a number
 
 ---
 
