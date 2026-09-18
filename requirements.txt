@@ -6,3 +6,4 @@ streamlit
 python-dotenv
 google-generativeai
 pytest
+sqlalchemy
