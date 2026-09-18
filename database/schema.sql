@@ -66,3 +66,28 @@ CREATE TABLE financial_ratios (
     FOREIGN KEY (company_id) REFERENCES companies(company_id),
     UNIQUE KEY unique_ratio (company_id)
 );
+
+CREATE TABLE investment_cases (
+    case_id INT AUTO_INCREMENT PRIMARY KEY,
+    company_id INT NOT NULL,
+    case_date DATE NOT NULL,
+    price_at_case DECIMAL(12,2),
+    latest_price DECIMAL(12,2),
+    outcome_return_1y DECIMAL(10,2),
+    outcome_return_to_date DECIMAL(10,2),
+    cagr_as_of_case DECIMAL(10,2),
+    volatility_as_of_case DECIMAL(10,2),
+    net_margin_as_of_case DECIMAL(10,2),
+    roe_as_of_case DECIMAL(10,2),
+    FOREIGN KEY (company_id) REFERENCES companies(company_id),
+    UNIQUE KEY unique_case (company_id)
+);
+
+CREATE TABLE user_decisions (
+    decision_id INT AUTO_INCREMENT PRIMARY KEY,
+    case_id INT,
+    decision VARCHAR(10),
+    was_correct BOOLEAN,
+    decision_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (case_id) REFERENCES investment_cases(case_id)
+);
