@@ -3,6 +3,7 @@
 **Every investment has a case. The Court decides whether it deserves your money.**
 
 🔗 **Live app:** https://investment-courtroom.streamlit.app/
+
 A rule-based investment analysis tool that puts a stock "on trial." A Bull side builds the
 strongest case for investing, a Bear side builds the strongest case against it, a Cross-Examination
 engine checks where their evidence actually contradicts, and a Judge combines everything into an
