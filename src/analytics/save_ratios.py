@@ -1,6 +1,7 @@
 import mysql.connector
 import os
 from datetime import date
+import math
 from dotenv import load_dotenv
 
 from src.analytics.price_metrics import get_all_metrics, calculate_beta
@@ -18,11 +19,12 @@ companies = [
 def get_connection():
     return mysql.connector.connect(
         host=os.getenv("DB_HOST"),
+        port=int(os.getenv("DB_PORT", 3306)),
         user=os.getenv("DB_USER"),
         password=os.getenv("DB_PASSWORD"),
         database=os.getenv("DB_NAME"),
+        ssl_ca="config/ca.pem",
     )
-
 
 def get_company_id(cursor, name):
     cursor.execute("SELECT company_id FROM companies WHERE name = %s", (name,))
@@ -58,6 +60,12 @@ def build_ratio_row(name):
 def pd_isna(value):
     import pandas as pd
     return pd.isna(value)
+def clean(value):
+    if value is None:
+        return None
+    if isinstance(value, float) and math.isnan(value):
+        return None
+    return value
 
 
 if __name__ == "__main__":
@@ -92,8 +100,9 @@ if __name__ == "__main__":
             """,
             (
                 company_id,
-                row["cagr"], row["volatility"], row["max_drawdown"], row["sharpe_ratio"], row["beta"],
-                row["roe"], row["roce"], row["net_margin"], row["operating_margin"],
+                clean(row["cagr"]), clean(row["volatility"]), clean(row["max_drawdown"]),
+                clean(row["sharpe_ratio"]), clean(row["beta"]),
+                clean(row["roe"]), clean(row["roce"]), clean(row["net_margin"]), clean(row["operating_margin"]),
                 date.today(),
             ),
         )

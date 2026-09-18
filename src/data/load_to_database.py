@@ -36,11 +36,12 @@ VALUATION_FILE = "data/raw/valuation_snapshot.csv"
 def get_connection():
     return mysql.connector.connect(
         host=os.getenv("DB_HOST"),
+        port=int(os.getenv("DB_PORT", 3306)),
         user=os.getenv("DB_USER"),
         password=os.getenv("DB_PASSWORD"),
         database=os.getenv("DB_NAME"),
+        ssl_ca="config/ca.pem",
     )
-
 
 def load_companies(cursor):
     print("Loading companies...")
@@ -69,13 +70,12 @@ def load_stock_prices(cursor, company_id_map):
             rows.append((
                 company_id,
                 row["Date"],
-                row.get("Open"),
-                row.get("High"),
-                row.get("Low"),
-                row.get("Close"),
-                row.get("Volume"),
+                clean(row.get("Open")),
+                clean(row.get("High")),
+                clean(row.get("Low")),
+                clean(row.get("Close")),
+                clean(row.get("Volume")),
             ))
-
         cursor.executemany(
             """INSERT IGNORE INTO stock_prices
                (company_id, price_date, open_price, high_price, low_price, close_price, volume)

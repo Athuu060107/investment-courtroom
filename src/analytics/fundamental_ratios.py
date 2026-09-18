@@ -11,10 +11,12 @@ def get_engine():
     user = os.getenv("DB_USER")
     password = quote_plus(os.getenv("DB_PASSWORD"))
     host = os.getenv("DB_HOST")
+    port = os.getenv("DB_PORT", "3306")
     dbname = os.getenv("DB_NAME")
-    return create_engine(f"mysql+mysqlconnector://{user}:{password}@{host}/{dbname}")
-
-
+    return create_engine(
+        f"mysql+mysqlconnector://{user}:{password}@{host}:{port}/{dbname}",
+        connect_args={"ssl_ca": "config/ca.pem"},
+    )
 def get_financials(company_name):
     conn = get_engine()
     query = """

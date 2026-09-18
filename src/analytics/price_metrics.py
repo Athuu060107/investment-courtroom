@@ -14,16 +14,22 @@ RISK_FREE_RATE = 0.07  # roughly the Indian 10-yr govt bond yield, used for Shar
 def get_connection():
     return mysql.connector.connect(
         host=os.getenv("DB_HOST"),
+        port=int(os.getenv("DB_PORT", 3306)),
         user=os.getenv("DB_USER"),
         password=os.getenv("DB_PASSWORD"),
         database=os.getenv("DB_NAME"),
+        ssl_ca="config/ca.pem",
     )
 def get_engine():
     user = os.getenv("DB_USER")
     password = quote_plus(os.getenv("DB_PASSWORD"))
     host = os.getenv("DB_HOST")
+    port = os.getenv("DB_PORT", "3306")
     dbname = os.getenv("DB_NAME")
-    return create_engine(f"mysql+mysqlconnector://{user}:{password}@{host}/{dbname}")
+    return create_engine(
+        f"mysql+mysqlconnector://{user}:{password}@{host}:{port}/{dbname}",
+        connect_args={"ssl_ca": "config/ca.pem"},
+    )
 def get_price_history(company_name):
     conn = get_engine()
     query = """

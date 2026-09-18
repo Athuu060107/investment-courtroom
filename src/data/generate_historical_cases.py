@@ -2,11 +2,18 @@ import mysql.connector
 import os
 import numpy as np
 from datetime import timedelta
+import math
 from dotenv import load_dotenv
 
 from src.analytics.price_metrics import get_price_history
 
 load_dotenv()
+def clean(value):
+    if value is None:
+        return None
+    if isinstance(value, float) and math.isnan(value):
+        return None
+    return value
 
 companies = [
     "HDFCBANK", "ICICIBANK", "SBIN", "TCS", "INFY", "WIPRO",
@@ -18,11 +25,12 @@ companies = [
 def get_connection():
     return mysql.connector.connect(
         host=os.getenv("DB_HOST"),
+        port=int(os.getenv("DB_PORT", 3306)),
         user=os.getenv("DB_USER"),
         password=os.getenv("DB_PASSWORD"),
         database=os.getenv("DB_NAME"),
+        ssl_ca="config/ca.pem",
     )
-
 
 def get_company_id(cursor, name):
     cursor.execute("SELECT company_id FROM companies WHERE name = %s", (name,))
@@ -111,9 +119,9 @@ if __name__ == "__main__":
                 volatility_as_of_case = VALUES(volatility_as_of_case)
             """,
             (
-                company_id, case["case_date"], case["price_at_case"], case["latest_price"],
-                case["outcome_return_1y"], case["outcome_return_to_date"],
-                case["cagr_as_of_case"], case["volatility_as_of_case"],
+                company_id, case["case_date"], clean(case["price_at_case"]), clean(case["latest_price"]),
+                clean(case["outcome_return_1y"]), clean(case["outcome_return_to_date"]),
+                clean(case["cagr_as_of_case"]), clean(case["volatility_as_of_case"]),
             ),
         )
         print(f"  case date: {case['case_date']}, 1yr return: {case['outcome_return_1y']}%")
