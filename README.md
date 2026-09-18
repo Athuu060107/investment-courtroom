@@ -10,53 +10,53 @@ explainable BUY / HOLD / AVOID verdict — all backed by real financial data, no
 Built as a portfolio project to combine Python, SQL, data analytics, and financial analysis into
 something that actually works end-to-end, not just a notebook.
 
-\---
+---
 
 
 
-\## Screenshots
+## Screenshots
 
 
 
-\*\*Home\*\*
+**Home**
 
-!\[Home page](docs/screenshots/01\_home.png)
-
-
-
-\*\*Stock Court\*\* — real 5-year price history and key metrics
-
-!\[Stock Court](docs/screenshots/02\_stock\_court.png)
+![Home page](docs/screenshots/01_home.png)
 
 
 
-\*\*Bull vs Bear\*\* — TCS: strong fundamentals vs. a real multi-year price decline
+**Stock Court** — real 5-year price history and key metrics
 
-!\[Bull vs Bear](docs/screenshots/03\_bull\_vs\_bear.png)
-
-
-
-\*\*Judge's Verdict\*\* — the same TCS case, combined into one explainable score
-
-!\[Judge's Verdict](docs/screenshots/04\_judges\_verdict.png)
+![Stock Court](docs/screenshots/02_stock_court.png)
 
 
 
-\*\*Stress Test\*\* — MARUTI's verdict shifting under a simulated downturn
+**Bull vs Bear** — TCS: strong fundamentals vs. a real multi-year price decline
 
-!\[Stress Test](docs/screenshots/05\_stress\_test.png)
-
-
-
-\*\*Portfolio Court\*\* — sector concentration and diversification check
-
-!\[Portfolio Court](docs/screenshots/06\_portfolio\_court.png)
+![Bull vs Bear](docs/screenshots/03_bull_vs_bear.png)
 
 
 
-\*\*Historical Case Mode\*\* — blind-guessing game using real historical data
+**Judge's Verdict** — the same TCS case, combined into one explainable score
 
-!\[Historical Case Mode](docs/screenshots/07\_historical\_case.png)
+![Judge's Verdict](docs/screenshots/04_judges_verdict.png)
+
+
+
+**Stress Test** — MARUTI's verdict shifting under a simulated downturn
+
+![Stress Test](docs/screenshots/05_stress_test.png)
+
+
+
+**Portfolio Court** — sector concentration and diversification check
+
+![Portfolio Court](docs/screenshots/06_portfolio_court.png)
+
+
+
+**Historical Case Mode** — blind-guessing game using real historical data
+
+![Historical Case Mode](docs/screenshots/07_historical_case.png)
 
 ## What it actually does
 
@@ -66,11 +66,11 @@ something that actually works end-to-end, not just a notebook.
 * **Judge's Verdict** — a weighted 4-pillar score (Quality / Growth / Valuation / Risk) with a plain-language explanation of the strongest arguments on each side
 * **Stress Test** — drag sliders to simulate a revenue decline, margin compression, or P/E contraction, and watch the verdict update live
 * **Portfolio Court** — build a multi-stock portfolio and get real diversification-aware volatility, drawdown, Sharpe ratio, and a sector-concentration check
-* **Historical Case Mode** — a blind-guessing game: see a real, anonymized case from \~2 years ago, guess BUY/HOLD/AVOID, then find out what actually happened
+* **Historical Case Mode** — a blind-guessing game: see a real, anonymized case from ~2 years ago, guess BUY/HOLD/AVOID, then find out what actually happened
 * **Investor DNA** — a behavioral profile (growth bias, risk appetite, valuation discipline, etc.) built from your own decisions in Historical Case Mode
 * **AI Courtroom** *(optional)* — the same computed evidence, narrated as natural courtroom dialogue by an LLM, which is strictly constrained to never invent a number
 
-\---
+---
 
 ## Tech stack
 
@@ -85,28 +85,28 @@ something that actually works end-to-end, not just a notebook.
 |Data source|yfinance|
 |Version control|Git / GitHub|
 
-\---
+---
 
 ## How it works
 
 ```mermaid
 flowchart TD
-    A\[yfinance] -->|prices + fundamentals| B\[(MySQL Database)]
-    B --> C\[Analytics Engine<br/>CAGR, volatility, Sharpe,<br/>beta, ROE, ROCE, margins]
-    C --> D\[Bull Engine]
-    C --> E\[Bear Engine]
-    D --> F\[Cross-Examination Engine]
+    A[yfinance] -->|prices + fundamentals| B[(MySQL Database)]
+    B --> C[Analytics Engine<br/>CAGR, volatility, Sharpe,<br/>beta, ROE, ROCE, margins]
+    C --> D[Bull Engine]
+    C --> E[Bear Engine]
+    D --> F[Cross-Examination Engine]
     E --> F
-    C --> G\[Scoring Engine<br/>Quality / Growth / Valuation / Risk]
-    G --> H\[Judge<br/>Overall Score + Verdict]
+    C --> G[Scoring Engine<br/>Quality / Growth / Valuation / Risk]
+    G --> H[Judge<br/>Overall Score + Verdict]
     D --> H
     E --> H
     F --> H
-    H --> I\[Streamlit App]
+    H --> I[Streamlit App]
     D --> I
     E --> I
     F --> I
-    H -.optional.-> J\[AI Narrator<br/>Gemini API]
+    H -.optional.-> J[AI Narrator<br/>Gemini API]
     J -.-> I
 ```
 
@@ -114,80 +114,80 @@ Nothing downstream of the database is a black box — every argument the Bull or
 every score the Judge produces, is directly traceable back to a real, computed number. The optional
 AI layer only rephrases evidence that already exists; it is never asked to analyze anything itself.
 
-\---
+---
 
 ## Database schema
 
 ```mermaid
 erDiagram
-    companies ||--o{ stock\_prices : has
-    companies ||--o{ financial\_statements : has
-    companies ||--o{ valuation\_metrics : has
-    companies ||--o{ financial\_ratios : has
-    companies ||--o{ investment\_cases : has
-    investment\_cases ||--o{ user\_decisions : has
+    companies ||--o{ stock_prices : has
+    companies ||--o{ financial_statements : has
+    companies ||--o{ valuation_metrics : has
+    companies ||--o{ financial_ratios : has
+    companies ||--o{ investment_cases : has
+    investment_cases ||--o{ user_decisions : has
 
     companies {
-        int company\_id PK
+        int company_id PK
         string name
         string ticker
         string sector
     }
-    stock\_prices {
-        int price\_id PK
-        int company\_id FK
-        date price\_date
-        decimal close\_price
+    stock_prices {
+        int price_id PK
+        int company_id FK
+        date price_date
+        decimal close_price
         bigint volume
     }
-    financial\_statements {
-        int statement\_id PK
-        int company\_id FK
-        date period\_end\_date
+    financial_statements {
+        int statement_id PK
+        int company_id FK
+        date period_end_date
         decimal revenue
-        decimal net\_income
-        decimal total\_debt
+        decimal net_income
+        decimal total_debt
         decimal equity
     }
-    valuation\_metrics {
-        int valuation\_id PK
-        int company\_id FK
-        decimal market\_cap
-        decimal pe\_ratio
-        decimal pb\_ratio
+    valuation_metrics {
+        int valuation_id PK
+        int company_id FK
+        decimal market_cap
+        decimal pe_ratio
+        decimal pb_ratio
     }
-    financial\_ratios {
-        int ratio\_id PK
-        int company\_id FK
+    financial_ratios {
+        int ratio_id PK
+        int company_id FK
         decimal cagr
         decimal volatility
-        decimal sharpe\_ratio
+        decimal sharpe_ratio
         decimal beta
         decimal roe
         decimal roce
     }
-    investment\_cases {
-        int case\_id PK
-        int company\_id FK
-        date case\_date
-        decimal outcome\_return\_1y
+    investment_cases {
+        int case_id PK
+        int company_id FK
+        date case_date
+        decimal outcome_return_1y
     }
-    user\_decisions {
-        int decision\_id PK
-        int case\_id FK
+    user_decisions {
+        int decision_id PK
+        int case_id FK
         string decision
-        boolean was\_correct
+        boolean was_correct
     }
 ```
 
-\---
+---
 
 ## Companies covered
 
 15 large-cap NSE-listed companies across Banking, IT, Energy, FMCG, Auto, Pharma, and Cement,
 plus the Nifty 50 index as a market benchmark for beta calculations.
 
-\---
+---
 
 ## Running it locally
 
@@ -202,22 +202,22 @@ pip install -r requirements.txt
 Create a `.env` file in the project root with:
 
 ```
-DB\_HOST=localhost
-DB\_USER=your\_mysql\_user
-DB\_PASSWORD=your\_mysql\_password
-DB\_NAME=investment\_courtroom
-GEMINI\_API\_KEY=your\_gemini\_api\_key   # only needed for the optional AI Courtroom page
+DB_HOST=localhost
+DB_USER=your_mysql_user
+DB_PASSWORD=your_mysql_password
+DB_NAME=investment_courtroom
+GEMINI_API_KEY=your_gemini_api_key   # only needed for the optional AI Courtroom page
 ```
 
 Set up the database, then run the data pipeline in order:
 
 ```bash
-python -m src.data.fetch\_prices
-python -m src.data.fetch\_fundamentals
-python -m src.data.fetch\_market\_index
-python -m src.data.load\_to\_database
-python -m src.analytics.save\_ratios
-python -m src.data.generate\_historical\_cases
+python -m src.data.fetch_prices
+python -m src.data.fetch_fundamentals
+python -m src.data.fetch_market_index
+python -m src.data.load_to_database
+python -m src.analytics.save_ratios
+python -m src.data.generate_historical_cases
 ```
 
 Then launch the app:
@@ -226,7 +226,7 @@ Then launch the app:
 streamlit run app\\Home.py
 ```
 
-\---
+---
 
 ## Known limitations
 
@@ -250,7 +250,7 @@ every other feature in this app has zero dependency on any external AI service.
 * Deploy publicly (Streamlit Community Cloud)
 * Add a proper covariance-matrix-based portfolio beta and expected return model
 
-\---
+---
 
 ## Author
 
