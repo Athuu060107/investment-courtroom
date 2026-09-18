@@ -5,3 +5,4 @@ plotly
 streamlit
 python-dotenv
 google-generativeai
+pytest
